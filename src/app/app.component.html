@@ -1,0 +1,73 @@
+<div class="page-container">
+  <div class="card">
+    <header class="card-header">
+      <!-- <div class="badge">MEAN Stack App</div> -->
+      <h1>To-Do List</h1>
+      <p class="subtitle"><b>Feel free to manage you tasks easily</b></p>
+    </header>
+
+    <main class="card-body">
+      <!-- Add Todo Form -->
+      <form class="todo-form" (ngSubmit)="addTodo()">
+        <input
+          type="text"
+          name="newTodo"
+          class="todo-input"
+          placeholder="What needs to be done?"
+          [(ngModel)]="newTodoTitle"
+          [disabled]="isSubmitting"
+          autocomplete="off"
+        />
+        <button
+          type="submit"
+          class="btn-primary"
+          [disabled]="!newTodoTitle.trim() || isSubmitting"
+        >
+          <span *ngIf="!isSubmitting">+ Add Task</span>
+          <span *ngIf="isSubmitting">Adding...</span>
+        </button>
+      </form>
+
+      <!-- Error Notification -->
+      <div *ngIf="errorMessage" class="error-banner">
+        {{ errorMessage }}
+      </div>
+
+      <!-- Todo List Section -->
+      <section class="todo-section">
+        <div class="section-header">
+          <h2>Tasks</h2>
+          <span class="count-badge" *ngIf="!isLoading">
+            {{ todos.length }} {{ todos.length === 1 ? 'item' : 'items' }}
+          </span>
+        </div>
+
+        <!-- Loading State -->
+        <div *ngIf="isLoading" class="loading-state">
+          <div class="spinner"></div>
+          <p>Loading tasks...</p>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="!isLoading && todos.length === 0" class="empty-state">
+          <div class="empty-icon">📝</div>
+          <p class="empty-title">No tasks yet</p>
+          <p class="empty-desc">Add your first to-do item using the field above.</p>
+        </div>
+
+        <!-- List of Items -->
+        <ul *ngIf="!isLoading && todos.length > 0" class="todo-list">
+          <li *ngFor="let todo of todos; let i = index" class="todo-item">
+            <span class="todo-index">{{ i + 1 }}</span>
+            <div class="todo-content">
+              <span class="todo-title">{{ todo.title }}</span>
+              <span class="todo-time" *ngIf="todo.createdAt">
+                Added {{ todo.createdAt | date: 'mediumDate' }} at {{ todo.createdAt | date: 'shortTime' }}
+              </span>
+            </div>
+          </li>
+        </ul>
+      </section>
+    </main>
+  </div>
+</div>
